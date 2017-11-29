@@ -9,9 +9,16 @@
 </p>
 
 <%= form_tag create_comment_to_post_path, id: "comment" do %>
-  <%= text_field_tag "comment[body]" %>
-  <%= submit_tag "댓글달기" %>
+  <%= text_field_tag "comment[body]"%>
+  
+  <div>
+    <span id="word_count">0</span>/<%= Comment.MAX_LENGTH%>
+    <%= submit_tag "댓글달기" %>
+  </div>
 <% end %>
+
+
+
 <%= link_to 'Edit', edit_post_path(@post), class: "btn btn-warning" %> 
 <%= link_to 'Back', posts_path, class: "btn btn-success" %>
 <% if @like %>
@@ -61,4 +68,29 @@
     });
     
   })
+  
+  // $('#comment').on('keyup', function() {
+  //   var com = $('#comment_body').val();
+  //   console.log(com);
+  // });
+  
+  var max_text_length = <%= Comment.MAX_LENGTH %>;
+  
+  $('#comment').on('keyup', function() {
+    var text_length = $('#comment_body').val().length;
+    $('#word_count').addClass('text-success').removeClass('text-danger');
+  
+    // console.log($(this).val())
+    
+    // 내가 입력한 텍스트의 길이가 최대 길이를 넘으면
+    // 최대길이 넘는다는 알림창
+    // 초과 글자 자르기
+    if(text_length >= max_text_length) {
+      alert("50자 초과")
+      $('#word_count').addClass('text-danger').removeClass('text-success');
+      $('#comment_body').val($('#comment_body').val().substr(0, max_text_length));
+      text_length = $('#comment_body').val().length;
+    }
+    $('#word_count').text(text_length);
+  });
 </script>

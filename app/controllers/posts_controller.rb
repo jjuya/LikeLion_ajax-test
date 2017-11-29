@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.order("created_at DESC").page(params[:page])
   end
 
   # GET /posts/1
@@ -88,6 +88,10 @@ class PostsController < ApplicationController
     end
     # puts "Like Post Success"
     @result = @result.frozen?
+  end
+  
+  def page_scroll
+    @posts = Post.order("created_at DESC").page(params[:page])
   end
 
   private
